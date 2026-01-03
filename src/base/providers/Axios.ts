@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosError } from 'axios'
 import {
   ApiBase,
   ApiParams,
@@ -9,21 +9,39 @@ import {
 } from '../Api'
 
 export class Axios implements ApiBase<AxiosInstance>, ApiInsertAble {
-  instance
+  instance: AxiosInstance
+
   constructor({ baseURL, headers = defaultHeaders }: CreateApiInstanceParams) {
     this.instance = axios.create({
       baseURL,
       headers,
     })
   }
-  async post<T>({ endpoint, data, headers }: ApiParams): Promise<ApiResponse<T>> {
+
+  async post<T>({
+    endpoint,
+    data,
+    headers,
+  }: ApiParams): Promise<ApiResponse<T>> {
     try {
       const response = await this.instance.post<T>(endpoint, data, {
-        headers,
+        headers: {
+          ...defaultHeaders,
+          ...headers,
+        },
       })
-      return { status: 200, data: response.data }
+
+      return {
+        status: response.status,
+        data: response.data,
+      }
     } catch (error: unknown) {
-      return { status: 400, error: error as Error }
+      const err = error as AxiosError
+
+      return {
+        status: err.response?.status ?? 500,
+        error: err,
+      }
     }
   }
 }

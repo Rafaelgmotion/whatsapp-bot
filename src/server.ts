@@ -17,7 +17,7 @@ client.on('ready', () => {
   console.log('Client is ready!');
 });
 
-const BOT_NUMBER = "13156887484"
+const BOT_NUMBER = "5524999467266"
 
 let participants: any[] = []
 let present: string[] = []

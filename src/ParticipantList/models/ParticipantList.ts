@@ -2,6 +2,6 @@ export type ParticipantList = {
   present: string[]
   absent: string[]
   groupName: string
-  date: string
-  slug: string
+  date: string // ISO 8601
+  slug?: string
 }

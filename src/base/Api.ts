@@ -1,7 +1,7 @@
 interface ApiResponse<T> {
   status: number
-  error?: Error
   data?: T
+  error?: unknown
 }
 
 interface ApiHeaders {
@@ -9,12 +9,13 @@ interface ApiHeaders {
 }
 
 interface ApiData {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 interface ApiParams {
   endpoint: string
   data?: ApiData
+  params?: ApiData
   headers?: ApiHeaders
 }
 
@@ -23,7 +24,7 @@ interface CreateApiInstanceParams {
   headers?: ApiHeaders
 }
 
-const defaultHeaders = {
+const defaultHeaders: ApiHeaders = {
   'Content-Type': 'application/json',
 }
 
@@ -44,7 +45,7 @@ interface ApiUpgradeAble {
   patch<T>(params: ApiParams): Promise<ApiResponse<T>>
 }
 
-interface ApiRemovAble {
+interface ApiRemoveAble {
   delete<T>(params: ApiParams): Promise<ApiResponse<T>>
 }
 
@@ -55,7 +56,7 @@ export {
   ApiInsertAble,
   ApiParams,
   ApiQueryAble,
-  ApiRemovAble,
+  ApiRemoveAble,
   ApiResponse,
   ApiUpgradeAble,
   defaultHeaders,
